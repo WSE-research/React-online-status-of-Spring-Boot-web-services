@@ -1,5 +1,6 @@
 {
   "name": "@qanary/spring-boot-health-check",
+  "private": "false",
   "version": "0.0.1",
   "description": "TBD",
   "main": "dist/index.js",
