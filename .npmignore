@@ -1,0 +1,6 @@
+node_modules/
+src/
+docs/
+.gitignore
+babel.config.json
+jsdoc.config.json

@@ -1,0 +1,41 @@
+:root {
+  --ok-color: rgb(0, 255, 0);
+  --problem-color: red;
+  --offline-color: rgb(71, 71, 71);
+}
+
+.spring-boot-status {
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.1);
+}
+
+.spring-boot-status > .actuator {
+  order: 1;
+}
+.spring-boot-status > .health {
+  order: 2;
+}
+
+.spring-boot-status .ok {
+  color: var(--ok-color);
+}
+
+.spring-boot-status .problem {
+  color: var(--problem-color);
+}
+
+.spring-boot-status .offline,
+.spring-boot-status .no-cors {
+  color: var(--offline-color);
+}
+
+.spring-boot-status .health :not(.ok) {
+  color: var(--problem-color);
+}
