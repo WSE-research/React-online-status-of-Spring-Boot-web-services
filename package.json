@@ -1,22 +1,24 @@
 {
   "name": "@qanary/spring-boot-health-check",
-  "private": "false",
   "version": "0.0.1",
-  "description": "TBD",
+  "description": "A straightforward component to check the status of a Spring Boot service.",
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "dependencies": {
+    "prop-types": "^15.8.1"
+  },
+  "peerDependencies": {
+    "react": "^18.1.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.17.10",
-    "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-react": "^7.16.7",
     "clean-jsdoc-theme": "^3.3.4",
-    "jsdoc": "^3.6.10"
+    "jsdoc": "^3.6.10",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
   },
   "scripts": {
     "build": "rm -rf dist && NODE_ENV=production babel src --out-dir dist --copy-files",
@@ -46,8 +48,5 @@
     "url": "https://github.com/anbo-de/react-online-status-of-spring-boot-web-services"
   },
   "author": "wunsch.jonas@hotmail.com",
-  "license": "MIT",
-  "dependencies": {
-    "prop-types": "^15.8.1"
-  }
+  "license": "MIT"
 }
