@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+// @ts-check
+import { useEffect, useState } from "react";
 
 /**
  * @namespace useApplicationStatus

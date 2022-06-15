@@ -1,7 +1,7 @@
+// @ts-check
 import React from "react";
 import "./index.css";
 import { useApplicationStatus } from "./hooks/useApplicationStatus";
-import PropTypes from "prop-types";
 
 /**
  * @namespace SpringBootHealthCheck
@@ -28,7 +28,7 @@ import PropTypes from "prop-types";
  *  margin="0.2rem" />
  *
  * @param {SpringBootHealthCheckProps} props
- * @returns {React.Component}
+ * @returns {JSX.Element}
  */
 function SpringBootHealthCheck({
   springBootAppUrl = "http://localhost:8080",
@@ -60,12 +60,5 @@ function SpringBootHealthCheck({
     </div>
   );
 }
-
-SpringBootHealthCheck.propTypes = {
-  springBootAppUrl: PropTypes.string,
-  checkInterval: PropTypes.number,
-  padding: PropTypes.string,
-  margin: PropTypes.string,
-};
 
 export default SpringBootHealthCheck;

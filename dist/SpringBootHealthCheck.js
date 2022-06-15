@@ -11,9 +11,9 @@ require("./index.css");
 
 var _useApplicationStatus = require("./hooks/useApplicationStatus");
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// @ts-check
 
 /**
  * @namespace SpringBootHealthCheck
@@ -40,7 +40,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *  margin="0.2rem" />
  *
  * @param {SpringBootHealthCheckProps} props
- * @returns {React.Component}
+ * @returns {JSX.Element}
  */
 function SpringBootHealthCheck(_ref) {
   let {
@@ -75,11 +75,5 @@ function SpringBootHealthCheck(_ref) {
   }, health == null ? "Loading health.." : health === null || health === void 0 ? void 0 : health.text)));
 }
 
-SpringBootHealthCheck.propTypes = {
-  springBootAppUrl: _propTypes.default.string,
-  checkInterval: _propTypes.default.number,
-  padding: _propTypes.default.string,
-  margin: _propTypes.default.string
-};
 var _default = SpringBootHealthCheck;
 exports.default = _default;
