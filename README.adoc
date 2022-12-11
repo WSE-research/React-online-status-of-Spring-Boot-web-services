@@ -1,10 +1,18 @@
 # react-online-status-of-spring-boot-web-services
 
+*You want to monitor your Spring Boot (or other ones implementing the `/health` endpoint) applications in a React web application? Then, you are at the right place.*
+
 A straightforward plugin for checking the status of a Spring Boot service.
+
+:toc:
 
 For more detailed descriptions of everything, see the automatically generated [documentation](docs/docs.md).
 
-Example Usage:
+## Usage Examples
+
+### Basic Example
+
+Use the following React component parameters to monitoring a Webservice being deployed to http://localhost:8000:
 
 ```jsx
 <SpringBootHealthCheck
@@ -14,7 +22,9 @@ Example Usage:
   margin="0.2rem" />
 ```
 
-Example for overwriting the colours:
+### CSS Example for overwriting the colours:
+
+Use the following CSS configuration to customize the design of the component:
 
 ```css
 :root {
