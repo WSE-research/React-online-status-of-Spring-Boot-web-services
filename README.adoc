@@ -1,6 +1,6 @@
 # react-online-status-of-spring-boot-web-services
 
-*You want to monitor your Spring Boot (or other ones implementing the `/health` endpoint) applications in a React web application? Then, you are at the right place.*
+_You want to monitor your Spring Boot (or other ones implementing the `/health` endpoint) applications in a React web application? Then, you are at the right place._
 
 A straightforward plugin for checking the status of a Spring Boot service.
 
