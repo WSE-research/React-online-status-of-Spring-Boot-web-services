@@ -1,10 +1,14 @@
+:toc:
+:toclevels: 5
+:toc-placement!:
+
 # react-online-status-of-spring-boot-web-services
 
 _You want to monitor your Spring Boot (or other ones implementing the `/health` endpoint) applications in a React web application? Then, you are at the right place._
 
-A straightforward plugin for checking the status of a Spring Boot service.
+A straightforward plugin for checking the status of a Spring Boot web service.
 
-:toc:
+toc::[]
 
 For more detailed descriptions of everything, see the automatically generated [documentation](docs/docs.md).
 
