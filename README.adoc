@@ -6,11 +6,11 @@
 
 _You want to monitor your Spring Boot (or other ones implementing the `/health` endpoint) applications in a React web application? Then, you are at the right place._
 
-A straightforward plugin for checking the status of a Spring Boot web service.
+*A straightforward plugin for checking the status of a Spring Boot web service.*
 
 toc::[]
 
-For more detailed descriptions of everything, see the automatically generated [documentation](docs/docs.md).
+For more detailed descriptions of everything, see the automatically generated link:docs/docs.md[documentation].
 
 ## Usage Examples
 
@@ -26,7 +26,7 @@ Use the following React component parameters to monitoring a Webservice being de
   margin="0.2rem" />
 ```
 
-### CSS Example for overwriting the colours:
+### CSS Example for overwriting the colors used in the status icons:
 
 Use the following CSS configuration to customize the design of the component:
 
