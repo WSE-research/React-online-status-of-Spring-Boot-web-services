@@ -6,15 +6,13 @@ const peerDepsExternal = require("rollup-plugin-peer-deps-external");
 const autoprefixer = require("autoprefixer");
 const postcss = require("rollup-plugin-postcss");
 
-const packageJson = require("./package.json");
-
 module.exports.default = {
   input: "./dist/index.js",
   output: [
     {
-      file: packageJson.module,
+      file: "./dist/webexport.js",
       format: "iife",
-      sourcemap: false,
+      sourcemap: true,
       globals: {
         react: "React",
       },
@@ -27,7 +25,7 @@ module.exports.default = {
     peerDepsExternal(),
     postcss({
       plugins: [autoprefixer()],
-      sourceMap: false,
+      sourceMap: true,
       extract: true,
       minimize: true,
     }),
