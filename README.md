@@ -9,6 +9,7 @@ This is a package that is intended to be used with React, so React needs to be i
 Type declarations are provided in the package and no other dependencies are needed.
 
 Using `npm`: `npm i @qanary/spring-boot-health-check`
+
 Using `yarn`: `yarn add @qanary/spring-boot-health-check`
 
 ## Usage
