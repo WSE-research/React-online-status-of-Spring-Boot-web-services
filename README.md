@@ -1,6 +1,16 @@
 # Service Health Status Check
 
-A straightforward plug-in for checking the status of a Spring Boot service.
+_You want to monitor your Spring Boot (or other ones implementing the `/health` endpoint) applications in a React web application? Then, you are at the right place._
+
+**A straightforward plugin for checking the status of a Spring Boot web service.**
+
+NPM: [https://www.npmjs.com/package/@qanary/spring-boot-health-check](https://www.npmjs.com/package/@qanary/spring-boot-health-check)
+
+- [Service Health Status Check](#service-health-status-check)
+  - [Installation](#installation)
+  - [Usage Examples](#usage-examples)
+    - [Basic Example](#basic-example)
+    - [Working Examples](#working-examples)
 
 ## Installation
 
@@ -12,7 +22,17 @@ Using `npm`: `npm i @qanary/spring-boot-health-check`
 
 Using `yarn`: `yarn add @qanary/spring-boot-health-check`
 
-## Usage
+## Usage Examples
+
+### Basic Example
+
+Health Check for `type="admin"`
+
+![Admin Actuator](static/actuator-admin.png)
+
+Health Check for `type="basic"`
+
+![Basic Actuator](static/actuator-basic.png)
 
 ```jsx
 <SpringBootHealthCheck

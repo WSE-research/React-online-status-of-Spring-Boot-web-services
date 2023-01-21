@@ -8,6 +8,8 @@ _You want to monitor your Spring Boot (or other ones implementing the `/health` 
 
 *A straightforward plugin for checking the status of a Spring Boot web service.*
 
+NPM: link:https://www.npmjs.com/package/@qanary/spring-boot-health-check[https://www.npmjs.com/package/@qanary/spring-boot-health-check]
+
 toc::[]
 
 ## Installation
@@ -23,6 +25,15 @@ Using `yarn`: `yarn add @qanary/spring-boot-health-check`
 ## Usage Examples
 
 ### Basic Example
+
+Health Check for `type="admin"`
+
+image::static/actuator-admin.png[Admin Actuator]
+
+Health Check for `type="basic"`
+
+image::static/actuator-basic.png[Basic Actuator]
+
 
 Use the following React component parameters to monitoring a Webservice being deployed to http://localhost:8000:
 
