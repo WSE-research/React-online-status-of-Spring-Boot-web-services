@@ -12,9 +12,14 @@
  *
  * @param {string} [springBootAppUrl="http://localhost:8080"] The URL of the Spring Boot service, including port and without *any* routes.
  * @param {number} [interval=5000] The time in milliseconds between requests checking the status of the service.
+ * @param {"actuator"|"admin"|"basic"} [type="actuator"] The type of health endpoint which should be monitored
+ * @param {{username:string;password:string;}} [credentials] The Basic Auth Credentials
  * @returns {ApplicationStatus}
  */
-export function useApplicationStatus(springBootAppUrl?: string, interval?: number): ApplicationStatus;
+export function useApplicationStatus(type?: "actuator" | "admin" | "basic", credentials?: {
+    username: string;
+    password: string;
+}, springBootAppUrl?: string, interval?: number): ApplicationStatus;
 /**
  * Enum for states of a Spring Boot service
  */
@@ -36,6 +41,7 @@ export const SERVICE_STATUS: Readonly<{
     NO_CORS: "no-cors";
     PROBLEM: "problem";
     OK: "ok";
+    PROTECTED: "protected";
 }>;
 export type HealthStatus = {
     /**

@@ -20,6 +20,7 @@ export const SERVICE_STATUS = Object.freeze({
   NO_CORS: "no-cors",
   PROBLEM: "problem",
   OK: "ok",
+  PROTECTED: "protected",
 });
 
 /**
@@ -37,9 +38,13 @@ export const SERVICE_STATUS = Object.freeze({
  *
  * @param {string} [springBootAppUrl="http://localhost:8080"] The URL of the Spring Boot service, including port and without *any* routes.
  * @param {number} [interval=5000] The time in milliseconds between requests checking the status of the service.
+ * @param {"actuator"|"admin"|"basic"} [type="actuator"] The type of health endpoint which should be monitored
+ * @param {{username:string;password:string;}} [credentials] The Basic Auth Credentials
  * @returns {ApplicationStatus}
  */
 export function useApplicationStatus(
+  type,
+  credentials,
   springBootAppUrl = "http://localhost:8080",
   interval = 5000
 ) {
@@ -53,81 +58,213 @@ export function useApplicationStatus(
   }
 
   useEffect(() => {
-    fetch(`${springBootAppUrl}/actuator`)
-      .then((actuatorResponse) => {
-        if (!actuatorResponse?.ok) {
-          setActuatorStatus(SERVICE_STATUS.PROBLEM);
-        }
-
-        setActuatorStatus(SERVICE_STATUS.OK);
-        return actuatorResponse.json();
-      })
-      .then((actuatorData) => {
-        fetch(actuatorData._links.health.href)
-          .then((healthResponse) => {
-            if (!healthResponse?.ok) {
-              setHealth({
-                status: SERVICE_STATUS.PROBLEM,
-                text: `The service's health endpoint responded with a non-2XX response code: ${healthResponse.status}`,
-              });
-              return;
+    switch (type) {
+      case "actuator": {
+        fetch(`${springBootAppUrl}/actuator`, {
+          headers: {
+            Authorization: `Basic ${window.btoa(
+              `${credentials.username}:${credentials.password}`
+            )}`,
+          },
+        })
+          .then((actuatorResponse) => {
+            if (!actuatorResponse?.ok) {
+              setActuatorStatus(SERVICE_STATUS.PROBLEM);
+            } else {
+              setActuatorStatus(SERVICE_STATUS.OK);
             }
 
-            return healthResponse.json();
+            return actuatorResponse.json();
           })
-          .then((healthData) => {
-            if (healthData.status !== "UP") {
-              setHealth({
-                status: SERVICE_STATUS.PROBLEM,
-                text: healthData.status,
-              });
-              return;
-            }
+          .then((actuatorData) => {
+            fetch(actuatorData._links.health.href, {
+              headers: {
+                Authorization: `Basic ${window.btoa(
+                  `${credentials.username}:${credentials.password}`
+                )}`,
+              },
+            })
+              .then((healthResponse) => {
+                if (!healthResponse?.ok) {
+                  setHealth({
+                    status: SERVICE_STATUS.PROBLEM,
+                    text: `The service's health endpoint responded with a non-2XX response code: ${healthResponse.status}`,
+                  });
+                  return;
+                }
 
-            setHealth({
-              status: SERVICE_STATUS.OK,
-              text: healthData.status,
-            });
+                return healthResponse.json();
+              })
+              .then((healthData) => {
+                if (healthData.status !== "UP") {
+                  setHealth({
+                    status: SERVICE_STATUS.PROBLEM,
+                    text: healthData.status,
+                  });
+                  return;
+                }
+
+                setHealth({
+                  status: SERVICE_STATUS.OK,
+                  text: healthData.status,
+                });
+              })
+              .catch((error) => {
+                // console.error(error);
+                //? If the request goes through with the mode set
+                //? to no-cors it's online but not configured correctly
+                fetch(actuatorData._links.health.href, {
+                  mode: "no-cors",
+                  headers: {
+                    Authorization: `Basic ${window.btoa(
+                      `${credentials.username}:${credentials.password}`
+                    )}`,
+                  },
+                })
+                  .then(() => {
+                    setHealth({
+                      status: SERVICE_STATUS.NO_CORS,
+                      text: "The service's health endpoint does not allow CORS.",
+                    });
+                  })
+                  .catch(() => {
+                    setHealth({
+                      status: SERVICE_STATUS.OFFLINE,
+                      text: "The service's health endpoint is offline.",
+                    });
+                  });
+              });
           })
-          .catch((error) => {
-            console.error(error);
+          .catch(() => {
             //? If the request goes through with the mode set
             //? to no-cors it's online but not configured correctly
-            fetch(actuatorData._links.health.href, { mode: "no-cors" })
+            fetch(`${springBootAppUrl}/actuator`, {
+              mode: "no-cors",
+              headers: {
+                Authorization: `Basic ${window.btoa(
+                  `${credentials.username}:${credentials.password}`
+                )}`,
+              },
+            })
               .then(() => {
+                setActuatorStatus(SERVICE_STATUS.NO_CORS);
                 setHealth({
                   status: SERVICE_STATUS.NO_CORS,
-                  text: "The service's health endpoint does not allow CORS.",
+                  text: "The actuator does not allow CORS.",
                 });
               })
               .catch(() => {
+                setActuatorStatus(SERVICE_STATUS.OFFLINE);
                 setHealth({
                   status: SERVICE_STATUS.OFFLINE,
-                  text: "The service's health endpoint is offline.",
+                  text: "The actuator is offline.",
                 });
               });
           });
-      })
-      .catch((error) => {
-        console.error(error);
-        //? If the request goes through with the mode set
-        //? to no-cors it's online but not configured correctly
-        fetch(`${springBootAppUrl}/actuator`, { mode: "no-cors" })
-          .then(() => {
-            setActuatorStatus(SERVICE_STATUS.NO_CORS);
-            setHealth({
-              status: SERVICE_STATUS.NO_CORS,
-              text: "The actuator does not allow CORS.",
-            });
+        break;
+      }
+      case "admin": {
+        fetch(`${springBootAppUrl}/admin/status`, {
+          headers: {
+            Authorization: `Basic ${window.btoa(
+              `${credentials.username}:${credentials.password}`
+            )}`,
+          },
+        })
+          .then((response) => {
+            if (!response?.ok) {
+              if (response.status === 401) {
+                setActuatorStatus(SERVICE_STATUS.PROTECTED);
+                setHealth({
+                  status: SERVICE_STATUS.PROTECTED,
+                  text: "The ressource is password protected and the provided credentials were incorrect.",
+                });
+                return;
+              } else {
+                setActuatorStatus(SERVICE_STATUS.PROBLEM);
+              }
+            } else {
+              setActuatorStatus(SERVICE_STATUS.OK);
+            }
+
+            return response.json();
           })
           .catch(() => {
-            setActuatorStatus(SERVICE_STATUS.OFFLINE);
-            setHealth({
-              status: SERVICE_STATUS.OFFLINE,
-              text: "The actuator is offline.",
-            });
+            //? If the request goes through with the mode set
+            //? to no-cors it's online but not configured correctly
+            fetch(`${springBootAppUrl}/admin/status`, {
+              mode: "no-cors",
+              headers: {
+                Authorization: `Basic ${window.btoa(
+                  `${credentials.username}:${credentials.password}`
+                )}`,
+              },
+            })
+              .then(() => {
+                setActuatorStatus(SERVICE_STATUS.NO_CORS);
+                setHealth({
+                  status: SERVICE_STATUS.NO_CORS,
+                  text: "The actuator does not allow CORS.",
+                });
+              })
+              .catch(() => {
+                setActuatorStatus(SERVICE_STATUS.OFFLINE);
+                setHealth({
+                  status: SERVICE_STATUS.OFFLINE,
+                  text: "The actuator is offline.",
+                });
+              });
           });
-      });
+        break;
+      }
+      case "basic": {
+        fetch(springBootAppUrl)
+          .then((response) => {
+            if (!response?.ok) {
+              setActuatorStatus(SERVICE_STATUS.PROBLEM);
+              setHealth({
+                status: SERVICE_STATUS.PROBLEM,
+                text: `The service responded with the non-ok status code ${response.status}`,
+              });
+            } else {
+              setActuatorStatus(SERVICE_STATUS.OK);
+              setHealth({
+                status: SERVICE_STATUS.PROBLEM,
+                text: `The service responded with the ok status code ${response.status}`,
+              });
+            }
+          })
+          .catch(() => {
+            //? If the request goes through with the mode set
+            //? to no-cors it's online but not configured correctly
+            fetch(springBootAppUrl, {
+              mode: "no-cors",
+            })
+              .then(() => {
+                setActuatorStatus(SERVICE_STATUS.NO_CORS);
+                setHealth({
+                  status: SERVICE_STATUS.NO_CORS,
+                  text: "The service does not allow CORS.",
+                });
+              })
+              .catch(() => {
+                setActuatorStatus(SERVICE_STATUS.OFFLINE);
+                setHealth({
+                  status: SERVICE_STATUS.OFFLINE,
+                  text: "The service is offline.",
+                });
+              });
+          });
+        break;
+      }
+      default: {
+        setActuatorStatus(SERVICE_STATUS.PROBLEM);
+        setHealth({
+          status: SERVICE_STATUS.PROBLEM,
+          text: "This component is misconfigured. An invalid `type` property has been passed to it.",
+        });
+      }
+    }
 
     setTimeout(() => setCheckNotifier(!checkNotifier), interval);
   }, [springBootAppUrl, checkNotifier]);

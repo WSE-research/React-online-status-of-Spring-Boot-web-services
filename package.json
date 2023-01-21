@@ -1,11 +1,10 @@
 {
   "name": "@qanary/spring-boot-health-check",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A straightforward component to check the status of a Spring Boot service.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "module": "dist/index.js",
-  "dependencies": {},
+  "module": "dist/index.esm.js",
   "peerDependencies": {
     "react": "^18.1.0"
   },
@@ -14,15 +13,23 @@
     "@babel/core": "^7.17.10",
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-react": "^7.16.7",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "@types/node": "^17.0.44",
     "@types/react": "^18.0.12",
-    "jsdoc-to-markdown": "^7.1.1",
+    "autoprefixer": "^10.4.13",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "rollup": "^3.10.1",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-internal": "^1.0.4",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
     "typescript": "^4.7.3"
   },
   "scripts": {
-    "build": "[ ! -d dist ] && mkdir dist || rm -rf dist/* rm -rf dist/* && NODE_ENV=production babel src --out-dir dist --copy-files && tsc",
+    "build": "[ ! -d dist ] && mkdir dist || rm -rf dist/* rm -rf dist/* && NODE_ENV=production babel src --out-dir dist --copy-files && tsc && rollup -c",
     "publish:npm": "npm run build",
     "docs": "[ ! -d docs ] && mkdir docs || rm -rf docs/* && jsdoc2md -f src/**/*.js* > docs/docs.md"
   },
@@ -46,7 +53,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anbo-de/react-online-status-of-spring-boot-web-services"
+    "url": "https://github.com/WSE-research/React-online-status-of-Spring-Boot-web-services"
   },
   "author": "wunsch.jonas@hotmail.com",
   "license": "MIT"
