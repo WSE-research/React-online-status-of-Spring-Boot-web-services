@@ -30,8 +30,7 @@
   },
   "scripts": {
     "build": "[ ! -d dist ] && mkdir dist || rm -rf dist/* rm -rf dist/* && NODE_ENV=production babel src --out-dir dist --copy-files && tsc && rollup -c",
-    "publish:npm": "npm run build",
-    "docs": "[ ! -d docs ] && mkdir docs || rm -rf docs/* && jsdoc2md -f src/**/*.js* > docs/docs.md"
+    "publish:npm": "npm run build"
   },
   "eslintConfig": {
     "extends": [

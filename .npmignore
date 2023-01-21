@@ -3,6 +3,5 @@ src
 docs
 .gitignore
 babel.config.json
-jsdoc.config.json
 rollup.config.js
 examples
