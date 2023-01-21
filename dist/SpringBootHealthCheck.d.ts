@@ -9,13 +9,17 @@ export type SpringBootHealthCheckProps = {
      */
     checkInterval?: number;
     /**
-     * The padding of the container component. It should feature the amount and a unit.
+     * Additional class names that should be added to the health check component
      */
-    padding?: string;
+    className?: string;
     /**
-     * The margin of the container component. It should feature the amount and a unit.
+     * Should the default styling of the component be used?
      */
-    margin?: string;
+    shouldUseDefaultStyling?: boolean;
+    /**
+     * The type of health endpoint
+     */
+    type?: "actuator" | "admin" | "basic";
 };
 /**
  * @namespace SpringBootHealthCheck
@@ -24,8 +28,9 @@ export type SpringBootHealthCheckProps = {
  * @typedef {Object} SpringBootHealthCheckProps
  * @property {string} [springBootAppUrl="http://localhost:8080"] The URL of the Spring Boot service, including port and without *any* routes.
  * @property {number} [checkInterval=5000] The time in milliseconds between requests checking the status of the service.
- * @property {string} [padding="0.5rem"] The padding of the container component. It should feature the amount and a unit.
- * @property {string} [margin="0.5rem"] The margin of the container component. It should feature the amount and a unit.
+ * @property {string} [className=""] Additional class names that should be added to the health check component
+ * @property {boolean} [shouldUseDefaultStyling=true] Should the default styling of the component be used?
+ * @property {"actuator"|"admin"|"basic"} [type="actuator"] The type of health endpoint
  */
 /**
  * @name SpringBootHealthCheck
@@ -36,11 +41,11 @@ export type SpringBootHealthCheckProps = {
  * <SpringBootHealthCheck
  *  springBootAppUrl="http://localhost:8000"
  *  checkInterval={10000}
- *  padding="1rem"
- *  margin="0.2rem" />
+ *  shouldUseDefaultStyling={false}
+ *  className="custom-styling" />
  *
  * @param {SpringBootHealthCheckProps} props
  * @returns {JSX.Element}
  */
-declare function SpringBootHealthCheck({ springBootAppUrl, checkInterval, padding, margin, }: SpringBootHealthCheckProps): JSX.Element;
+declare function SpringBootHealthCheck({ springBootAppUrl, checkInterval, className, shouldUseDefaultStyling, type, }: SpringBootHealthCheckProps): JSX.Element;
 //# sourceMappingURL=SpringBootHealthCheck.d.ts.map

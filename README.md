@@ -1,14 +1,6 @@
-:toc:
-:toclevels: 5
-:toc-placement!:
-
 # Service Health Status Check
 
-_You want to monitor your Spring Boot (or other ones implementing the `/health` endpoint) applications in a React web application? Then, you are at the right place._
-
-*A straightforward plugin for checking the status of a Spring Boot web service.*
-
-toc::[]
+A straightforward plug-in for checking the status of a Spring Boot service.
 
 ## Installation
 
@@ -20,11 +12,7 @@ Using `npm`: `npm i @qanary/spring-boot-health-check`
 
 Using `yarn`: `yarn add @qanary/spring-boot-health-check`
 
-## Usage Examples
-
-### Basic Example
-
-Use the following React component parameters to monitoring a Webservice being deployed to http://localhost:8000:
+## Usage
 
 ```jsx
 <SpringBootHealthCheck
@@ -41,7 +29,7 @@ Use the following React component parameters to monitoring a Webservice being de
   // "admin" is for HTTP Basic password-protected Stardog endpoints
   // "basic" is for a dumb request to the provided URL verifying the response is ok
   type={"basic"}
-  />
+/>
 ```
 
 Example for overwriting the colours:
@@ -58,5 +46,5 @@ Example for overwriting the colours:
 
 Working examples can be found in the examples directory:
 
-* link:./examples/basic-web-page/README.adoc[Using the plug-in on a basic web page]
-* link:./examples/typical-react-application/README.adoc[Using the plug-in in a typical React application]
+- [Using the plug-in on a basic web page](./examples/basic-web-page/README.md)
+- [Using the plug-in in a typical React application](./examples/typical-react-application/README.md)

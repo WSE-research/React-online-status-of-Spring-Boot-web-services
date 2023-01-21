@@ -6,21 +6,29 @@
 
 .spring-boot-status {
   width: fit-content;
+  position: relative;
   height: fit-content;
   display: flex;
-  position: relative;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid black;
-  border-radius: 20px;
-  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.1);
 }
 
-.spring-boot-status > .actuator {
+.spring-boot-status.default {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+}
+
+.spring-boot-status.default > .actuator {
   order: 1;
 }
-.spring-boot-status > .health {
+.spring-boot-status.default > .health {
   order: 2;
+}
+
+.spring-boot-status.default > .credentials-prompt {
+  order: 3;
 }
 
 .spring-boot-status .ok {
