@@ -1,0 +1,2 @@
+export function getMostImportantStatus(...statuses: import("../hooks/useApplicationStatus").ServiceStatus[]): import("../hooks/useApplicationStatus").ServiceStatus;
+//# sourceMappingURL=getMostImportantStatus.d.ts.map

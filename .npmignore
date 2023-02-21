@@ -6,5 +6,6 @@ babel.config.json
 rollup.config.js
 examples
 static
-*.adoc
+README.adoc
 tsconfig.json
+.github
