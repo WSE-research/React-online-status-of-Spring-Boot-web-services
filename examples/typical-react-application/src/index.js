@@ -10,7 +10,8 @@ root.render(
     <SpringBootHealthCheck
       springBootAppUrl="http://localhost:8000"
       checkInterval={10000}
-      shouldUseDefaultStyle
+      stylePreset="minimal"
+      name="My Spring Boot App"
       className="example"
       type="admin"
     />

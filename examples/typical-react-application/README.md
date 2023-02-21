@@ -23,14 +23,21 @@ const Main = () => {
   return (
     <div>
       <SpringBootHealthCheck
+        // a human-readable service name
+        // Default is "service"
+        name="My Spring Boot App"
         // The host of the spring boot application
         springBootAppUrl="http://localhost:8000"
         // The interval in milliseconds for checking the health status
         checkInterval={10000}
         // The HTML class property of the component
         className={"health-check"}
-        // Enable to use the default styling, disable and add custom classes for custom styling
-        shouldUseDefaultStyling
+        // The type of styling preset to use
+        // Default is "default" for all information with simple styling
+        // "simple" for condensed information with simple styling
+        // "minimal" for a coloured circle showing the status
+        // "none" for no styling which is ideal for custom styles
+        stylePreset="minimal"
         // The kind of health check that will be performed
         // Default is "actuator" for regular spring boot actuator health endpoints
         // "admin" is for HTTP Basic password-protected Stardog endpoints

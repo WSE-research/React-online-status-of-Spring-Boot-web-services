@@ -26,24 +26,24 @@ window.addEventListener("load", () => {
 
     var _react$1 = require$$0;
 
-    function _slicedToArray$1(arr, i) {
+    function _slicedToArray$2(arr, i) {
       return (
-        _arrayWithHoles$1(arr) ||
-        _iterableToArrayLimit$1(arr, i) ||
-        _unsupportedIterableToArray$1(arr, i) ||
-        _nonIterableRest$1()
+        _arrayWithHoles$2(arr) ||
+        _iterableToArrayLimit$2(arr, i) ||
+        _unsupportedIterableToArray$2(arr, i) ||
+        _nonIterableRest$2()
       );
     }
 
-    function _nonIterableRest$1() {
+    function _nonIterableRest$2() {
       throw new TypeError(
         "Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
       );
     }
 
-    function _unsupportedIterableToArray$1(o, minLen) {
+    function _unsupportedIterableToArray$2(o, minLen) {
       if (!o) return;
-      if (typeof o === "string") return _arrayLikeToArray$1(o, minLen);
+      if (typeof o === "string") return _arrayLikeToArray$2(o, minLen);
       var n = Object.prototype.toString.call(o).slice(8, -1);
       if (n === "Object" && o.constructor) n = o.constructor.name;
       if (n === "Map" || n === "Set") return Array.from(o);
@@ -51,10 +51,10 @@ window.addEventListener("load", () => {
         n === "Arguments" ||
         /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)
       )
-        return _arrayLikeToArray$1(o, minLen);
+        return _arrayLikeToArray$2(o, minLen);
     }
 
-    function _arrayLikeToArray$1(arr, len) {
+    function _arrayLikeToArray$2(arr, len) {
       if (len == null || len > arr.length) len = arr.length;
 
       for (var i = 0, arr2 = new Array(len); i < len; i++) {
@@ -64,7 +64,7 @@ window.addEventListener("load", () => {
       return arr2;
     }
 
-    function _iterableToArrayLimit$1(arr, i) {
+    function _iterableToArrayLimit$2(arr, i) {
       var _i =
         arr == null
           ? null
@@ -98,7 +98,7 @@ window.addEventListener("load", () => {
       return _arr;
     }
 
-    function _arrayWithHoles$1(arr) {
+    function _arrayWithHoles$2(arr) {
       if (Array.isArray(arr)) return arr;
     }
     /**
@@ -106,7 +106,7 @@ window.addEventListener("load", () => {
      */
 
     /**
-     * @typedef {("offline"|"no-cors"|"problem"|"ok")} ServiceStatus
+     * @typedef {("offline"|"no-cors"|"problem"|"ok"|"protected")} ServiceStatus
      */
 
     /**
@@ -157,17 +157,17 @@ window.addEventListener("load", () => {
           : 5000;
 
       var _useState = (0, _react$1.useState)(undefined),
-        _useState2 = _slicedToArray$1(_useState, 2),
+        _useState2 = _slicedToArray$2(_useState, 2),
         actuatorStatus = _useState2[0],
         setActuatorStatus = _useState2[1];
 
       var _useState3 = (0, _react$1.useState)(undefined),
-        _useState4 = _slicedToArray$1(_useState3, 2),
+        _useState4 = _slicedToArray$2(_useState3, 2),
         health = _useState4[0],
         setHealth = _useState4[1];
 
       var _useState5 = (0, _react$1.useState)(true),
-        _useState6 = _slicedToArray$1(_useState5, 2),
+        _useState6 = _slicedToArray$2(_useState5, 2),
         checkNotifier = _useState6[0],
         setCheckNotifier = _useState6[1]; // This is here to prevent issues with people accidentally
       // using URLs with a trailing slash
@@ -339,9 +339,21 @@ window.addEventListener("load", () => {
                       return;
                     } else {
                       setActuatorStatus(SERVICE_STATUS.PROBLEM);
+                      setHealth({
+                        status: SERVICE_STATUS.PROBLEM,
+                        text: "The service responded with the non-ok status code ".concat(
+                          response.status
+                        ),
+                      });
                     }
                   } else {
                     setActuatorStatus(SERVICE_STATUS.OK);
+                    setHealth({
+                      status: SERVICE_STATUS.OK,
+                      text: "The service responded with the ok status code ".concat(
+                        response.status
+                      ),
+                    });
                   }
 
                   return response.json();
@@ -395,7 +407,7 @@ window.addEventListener("load", () => {
                   } else {
                     setActuatorStatus(SERVICE_STATUS.OK);
                     setHealth({
-                      status: SERVICE_STATUS.PROBLEM,
+                      status: SERVICE_STATUS.OK,
                       text: "The service responded with the ok status code ".concat(
                         response.status
                       ),
@@ -447,6 +459,147 @@ window.addEventListener("load", () => {
       };
     }
 
+    var getMostImportantStatus$1 = {};
+
+    Object.defineProperty(getMostImportantStatus$1, "__esModule", {
+      value: true,
+    });
+    getMostImportantStatus$1.getMostImportantStatus = void 0;
+
+    function _slicedToArray$1(arr, i) {
+      return (
+        _arrayWithHoles$1(arr) ||
+        _iterableToArrayLimit$1(arr, i) ||
+        _unsupportedIterableToArray$1(arr, i) ||
+        _nonIterableRest$1()
+      );
+    }
+
+    function _nonIterableRest$1() {
+      throw new TypeError(
+        "Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
+      );
+    }
+
+    function _unsupportedIterableToArray$1(o, minLen) {
+      if (!o) return;
+      if (typeof o === "string") return _arrayLikeToArray$1(o, minLen);
+      var n = Object.prototype.toString.call(o).slice(8, -1);
+      if (n === "Object" && o.constructor) n = o.constructor.name;
+      if (n === "Map" || n === "Set") return Array.from(o);
+      if (
+        n === "Arguments" ||
+        /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)
+      )
+        return _arrayLikeToArray$1(o, minLen);
+    }
+
+    function _arrayLikeToArray$1(arr, len) {
+      if (len == null || len > arr.length) len = arr.length;
+
+      for (var i = 0, arr2 = new Array(len); i < len; i++) {
+        arr2[i] = arr[i];
+      }
+
+      return arr2;
+    }
+
+    function _iterableToArrayLimit$1(arr, i) {
+      var _i =
+        arr == null
+          ? null
+          : (typeof Symbol !== "undefined" && arr[Symbol.iterator]) ||
+            arr["@@iterator"];
+
+      if (_i == null) return;
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+
+      var _s, _e;
+
+      try {
+        for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i["return"] != null) _i["return"]();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+
+      return _arr;
+    }
+
+    function _arrayWithHoles$1(arr) {
+      if (Array.isArray(arr)) return arr;
+    }
+    /**
+     * @type {{[key in import("../hooks/useApplicationStatus").ServiceStatus]: number}}
+     */
+
+    var statusComparisonTable = {
+      ok: 0,
+      "no-cors": 1,
+      offline: 2,
+      problem: 3,
+      protected: 4,
+    };
+    /**
+     * @template Key
+     * @template Value
+     *
+     * @param {{[key in Key]: Value}} table
+     * @returns {{[key in Value]: Key}}
+     */
+
+    var inverseOfTable = function inverseOfTable(table) {
+      return Object.fromEntries(
+        Object.entries(table).map(function (_ref) {
+          var _ref2 = _slicedToArray$1(_ref, 2),
+            key = _ref2[0],
+            value = _ref2[1];
+
+          return [value, key];
+        })
+      );
+    };
+
+    var inverseOfStatusComparisonTable = inverseOfTable(statusComparisonTable);
+    /**
+     *
+     * @param  {...import("../hooks/useApplicationStatus").ServiceStatus} statuses
+     * @returns
+     */
+
+    var getMostImportantStatus = function getMostImportantStatus() {
+      for (
+        var _len = arguments.length, statuses = new Array(_len), _key = 0;
+        _key < _len;
+        _key++
+      ) {
+        statuses[_key] = arguments[_key];
+      }
+
+      return inverseOfStatusComparisonTable[
+        statuses.reduce(function (currentlyMostImportantStatus, nextStatus) {
+          return Math.max(
+            currentlyMostImportantStatus,
+            statusComparisonTable[nextStatus]
+          );
+        }, -1)
+      ];
+    };
+
+    getMostImportantStatus$1.getMostImportantStatus = getMostImportantStatus;
+
     function _typeof(obj) {
       "@babel/helpers - typeof";
 
@@ -476,6 +629,8 @@ window.addEventListener("load", () => {
     var _react = _interopRequireWildcard(require$$0);
 
     var _useApplicationStatus2 = useApplicationStatus$1;
+
+    var _getMostImportantStatus = getMostImportantStatus$1;
 
     function _getRequireWildcardCache(nodeInterop) {
       if (typeof WeakMap !== "function") return null;
@@ -619,10 +774,11 @@ window.addEventListener("load", () => {
 
     /**
      * @typedef {Object} SpringBootHealthCheckProps
+     * @property {string} [name="service"] The human-readable name that can be used to distinguish multiple components
      * @property {string} [springBootAppUrl="http://localhost:8080"] The URL of the Spring Boot service, including port and without *any* routes.
      * @property {number} [checkInterval=5000] The time in milliseconds between requests checking the status of the service.
      * @property {string} [className=""] Additional class names that should be added to the health check component
-     * @property {boolean} [shouldUseDefaultStyling=true] Should the default styling of the component be used?
+     * @property {"default"|"simple"|"minimal"|"none"} [stylePreset="default"] The type of styling preset to use
      * @property {"actuator"|"admin"|"basic"} [type="actuator"] The type of health endpoint
      */
 
@@ -635,7 +791,8 @@ window.addEventListener("load", () => {
      * <SpringBootHealthCheck
      *  springBootAppUrl="http://localhost:8000"
      *  checkInterval={10000}
-     *  shouldUseDefaultStyling={false}
+     *  name="my service"
+     *  stylePreset="minimal"
      *  className="custom-styling" />
      *
      * @param {SpringBootHealthCheckProps} props
@@ -643,6 +800,8 @@ window.addEventListener("load", () => {
      */
 
     function SpringBootHealthCheck(_ref) {
+      var _health$status;
+
       var _ref$springBootAppUrl = _ref.springBootAppUrl,
         springBootAppUrl =
           _ref$springBootAppUrl === void 0
@@ -653,9 +812,11 @@ window.addEventListener("load", () => {
           _ref$checkInterval === void 0 ? 5000 : _ref$checkInterval,
         _ref$className = _ref.className,
         className = _ref$className === void 0 ? "" : _ref$className,
-        _ref$shouldUseDefault = _ref.shouldUseDefaultStyling,
-        shouldUseDefaultStyling =
-          _ref$shouldUseDefault === void 0 ? true : _ref$shouldUseDefault,
+        _ref$name = _ref.name,
+        name = _ref$name === void 0 ? "service" : _ref$name,
+        _ref$stylePreset = _ref.stylePreset,
+        stylePreset =
+          _ref$stylePreset === void 0 ? "default" : _ref$stylePreset,
         _ref$type = _ref.type,
         type = _ref$type === void 0 ? "actuator" : _ref$type;
 
@@ -682,24 +843,56 @@ window.addEventListener("load", () => {
         health = _useApplicationStatus.health,
         actuatorStatus = _useApplicationStatus.actuatorStatus;
 
+      var presetClassName = stylePreset === "none" ? "" : stylePreset;
+      var overallStatus = (0, _getMostImportantStatus.getMostImportantStatus)(
+        (_health$status =
+          health === null || health === void 0 ? void 0 : health.status) !==
+          null && _health$status !== void 0
+          ? _health$status
+          : "offline",
+        actuatorStatus
+      );
       return /*#__PURE__*/ _react.default.createElement(
         "div",
         {
           className: "spring-boot-status "
-            .concat(className)
-            .concat(shouldUseDefaultStyling ? " default" : ""),
+            .concat(className, " ")
+            .concat(presetClassName, " ")
+            .concat(overallStatus),
+          title: "Status of "
+            .concat(name, ": ")
+            .concat(
+              health === null || health === void 0 ? void 0 : health.status,
+              "\nHealth of service: The "
+            )
+            .concat(name, " is ")
+            .concat(actuatorStatus, "."),
         },
         /*#__PURE__*/ _react.default.createElement(
           "div",
           {
             className: "actuator",
           },
-          "Status of actuator:",
+          /*#__PURE__*/ _react.default.createElement(
+            "span",
+            {
+              className: "statusMessagePrefix",
+            },
+            "Status of "
+          ),
+          /*#__PURE__*/ _react.default.createElement(
+            "span",
+            {
+              className: "statusServiceName",
+            },
+            name
+          ),
+          ":",
           " ",
           /*#__PURE__*/ _react.default.createElement(
             "span",
             {
-              className: actuatorStatus,
+              className: "".concat(actuatorStatus, " status"),
             },
             actuatorStatus == null
               ? "Loading actuator status.."
@@ -711,7 +904,21 @@ window.addEventListener("load", () => {
           {
             className: "health",
           },
-          "Health of service:",
+          /*#__PURE__*/ _react.default.createElement(
+            "span",
+            {
+              className: "statusMessagePrefix",
+            },
+            "Health of "
+          ),
+          /*#__PURE__*/ _react.default.createElement(
+            "span",
+            {
+              className: "statusServiceName",
+            },
+            name
+          ),
+          ":",
           " ",
           /*#__PURE__*/ _react.default.createElement(
             "span",
