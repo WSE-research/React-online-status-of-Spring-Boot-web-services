@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
  */
 
 /**
- * @typedef {("offline"|"no-cors"|"problem"|"ok")} ServiceStatus
+ * @typedef {("offline"|"no-cors"|"problem"|"ok"|"protected")} ServiceStatus
  */
 
 /**
@@ -182,9 +182,17 @@ export function useApplicationStatus(
                 return;
               } else {
                 setActuatorStatus(SERVICE_STATUS.PROBLEM);
+                setHealth({
+                  status: SERVICE_STATUS.PROBLEM,
+                  text: `The service responded with the non-ok status code ${response.status}`,
+                });
               }
             } else {
               setActuatorStatus(SERVICE_STATUS.OK);
+              setHealth({
+                status: SERVICE_STATUS.OK,
+                text: `The service responded with the ok status code ${response.status}`,
+              });
             }
 
             return response.json();
@@ -229,7 +237,7 @@ export function useApplicationStatus(
             } else {
               setActuatorStatus(SERVICE_STATUS.OK);
               setHealth({
-                status: SERVICE_STATUS.PROBLEM,
+                status: SERVICE_STATUS.OK,
                 text: `The service responded with the ok status code ${response.status}`,
               });
             }

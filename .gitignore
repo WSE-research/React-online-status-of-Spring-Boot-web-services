@@ -1,3 +1,4 @@
 node_modules
 test
 examples/create-react-app/package-lock.json
+dist
