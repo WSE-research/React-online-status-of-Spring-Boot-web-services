@@ -1,5 +1,5 @@
 // @ts-check
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import { useApplicationStatus } from "./hooks/useApplicationStatus";
 import { getMostImportantStatus } from "./utils/getMostImportantStatus";
@@ -35,15 +35,17 @@ import { getMostImportantStatus } from "./utils/getMostImportantStatus";
  * @returns {JSX.Element}
  */
 function SpringBootHealthCheck({
+  name,
   springBootAppUrl = "http://localhost:8080",
   checkInterval = 5000,
   className = "",
-  name = "service",
   stylePreset = "default",
   type = "actuator",
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [forceShowCredentialsInput, setForceShowCredentialsInput] =
+    useState(null);
   const { health, actuatorStatus } = useApplicationStatus(
     type,
     {
@@ -53,20 +55,40 @@ function SpringBootHealthCheck({
     springBootAppUrl,
     checkInterval
   );
+
+  useEffect(() => {
+    if (health?.status !== "protected") {
+      setForceShowCredentialsInput(false);
+    } else {
+      setForceShowCredentialsInput(true);
+    }
+  }, [health]);
+
   const presetClassName = stylePreset === "none" ? "" : stylePreset;
   const overallStatus = getMostImportantStatus(
     health?.status ?? "offline",
     actuatorStatus
   );
+  // forceShow trumps first condition
+  const shouldRenderCredentialsInput = Boolean(
+    Number(health?.status === "protected") & (forceShowCredentialsInput ?? 1) ||
+      forceShowCredentialsInput
+  );
 
   return (
     <div
       className={`spring-boot-status ${className} ${presetClassName} ${overallStatus}`}
-      title={`Status of ${name}: ${health?.status}\nHealth of service: The ${name} is ${actuatorStatus}.`}
+      title={`Status of ${name ?? springBootAppUrl}: ${
+        health?.status
+      }\nHealth of service: The ${
+        name ?? springBootAppUrl
+      } is ${actuatorStatus}.`}
     >
       <div className={"actuator"}>
         <span className="statusMessagePrefix">Status of </span>
-        <span className="statusServiceName">{name}</span>:{" "}
+        <span className="statusServiceName">
+          {name ?? springBootAppUrl}
+        </span>:{" "}
         <span className={`${actuatorStatus} status`}>
           {actuatorStatus == null
             ? "Loading actuator status.."
@@ -75,28 +97,44 @@ function SpringBootHealthCheck({
       </div>
       <div className={"health"}>
         <span className="statusMessagePrefix">Health of </span>
-        <span className="statusServiceName">{name}</span>:{" "}
+        <span className="statusServiceName">
+          {name ?? springBootAppUrl}
+        </span>:{" "}
         <span className={health?.status}>
           {health == null ? "Loading health.." : health?.text}
         </span>
       </div>
       {type === "admin" ? (
         <div className={"credentials-prompt"}>
-          <div>Enter credentials for basic auth if necessary</div>
-          Username:{" "}
-          <input
-            value={username}
-            className="username-input"
-            onChange={(changeEvent) => setUsername(changeEvent.target.value)}
-            placeholder="Username"
-          />
-          Password:{" "}
-          <input
-            value={password}
-            className="password-input"
-            onChange={(changeEvent) => setPassword(changeEvent.target.value)}
-            placeholder="Password"
-          />
+          {shouldRenderCredentialsInput ? (
+            <>
+              <div>Enter credentials for basic auth if necessary</div>
+              Username:{" "}
+              <input
+                value={username}
+                className="username-input"
+                onChange={(changeEvent) =>
+                  setUsername(changeEvent.target.value)
+                }
+                placeholder="Username"
+              />
+              Password:{" "}
+              <input
+                value={password}
+                className="password-input"
+                onChange={(changeEvent) =>
+                  setPassword(changeEvent.target.value)
+                }
+                placeholder="Password"
+              />
+            </>
+          ) : null}
+          <button
+            className="credentials-toggle"
+            onClick={() => setForceShowCredentialsInput((v) => !v)}
+          >
+            Toggle credentials
+          </button>
         </div>
       ) : null}
     </div>

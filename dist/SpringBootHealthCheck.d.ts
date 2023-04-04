@@ -53,5 +53,5 @@ export type SpringBootHealthCheckProps = {
  * @param {SpringBootHealthCheckProps} props
  * @returns {JSX.Element}
  */
-declare function SpringBootHealthCheck({ springBootAppUrl, checkInterval, className, name, stylePreset, type, }: SpringBootHealthCheckProps): JSX.Element;
+declare function SpringBootHealthCheck({ name, springBootAppUrl, checkInterval, className, stylePreset, type, }: SpringBootHealthCheckProps): JSX.Element;
 //# sourceMappingURL=SpringBootHealthCheck.d.ts.map

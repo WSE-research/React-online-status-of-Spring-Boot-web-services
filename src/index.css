@@ -107,6 +107,13 @@
   display: none;
 }
 
+.spring-boot-status.minimal > .credentials-toggle {
+  width: max-content;
+  top: 100%;
+  position: absolute;
+  display: block;
+}
+
 .spring-boot-status.minimal > .credentials-prompt {
   position: absolute;
   width: max-content;
