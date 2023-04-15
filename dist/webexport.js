@@ -638,14 +638,13 @@ this["@qanary/spring-boot-health-check"] = (function (require$$0) {
 	function SpringBootHealthCheck(_ref) {
 	  var _health$status;
 
-	  var _ref$springBootAppUrl = _ref.springBootAppUrl,
+	  var name = _ref.name,
+	      _ref$springBootAppUrl = _ref.springBootAppUrl,
 	      springBootAppUrl = _ref$springBootAppUrl === void 0 ? "http://localhost:8080" : _ref$springBootAppUrl,
 	      _ref$checkInterval = _ref.checkInterval,
 	      checkInterval = _ref$checkInterval === void 0 ? 5000 : _ref$checkInterval,
 	      _ref$className = _ref.className,
 	      className = _ref$className === void 0 ? "" : _ref$className,
-	      _ref$name = _ref.name,
-	      name = _ref$name === void 0 ? "service" : _ref$name,
 	      _ref$stylePreset = _ref.stylePreset,
 	      stylePreset = _ref$stylePreset === void 0 ? "default" : _ref$stylePreset,
 	      _ref$type = _ref.type,
@@ -661,6 +660,11 @@ this["@qanary/spring-boot-health-check"] = (function (require$$0) {
 	      password = _useState4[0],
 	      setPassword = _useState4[1];
 
+	  var _useState5 = (0, _react.useState)(null),
+	      _useState6 = _slicedToArray(_useState5, 2),
+	      forceShowCredentialsInput = _useState6[0],
+	      setForceShowCredentialsInput = _useState6[1];
+
 	  var _useApplicationStatus = (0, _useApplicationStatus2.useApplicationStatus)(type, {
 	    username: username,
 	    password: password
@@ -668,18 +672,25 @@ this["@qanary/spring-boot-health-check"] = (function (require$$0) {
 	      health = _useApplicationStatus.health,
 	      actuatorStatus = _useApplicationStatus.actuatorStatus;
 
+	  (0, _react.useEffect)(function () {
+	    if ((health === null || health === void 0 ? void 0 : health.status) === "protected") {
+	      setForceShowCredentialsInput(null);
+	    }
+	  }, [health]);
 	  var presetClassName = stylePreset === "none" ? "" : stylePreset;
-	  var overallStatus = (0, _getMostImportantStatus.getMostImportantStatus)((_health$status = health === null || health === void 0 ? void 0 : health.status) !== null && _health$status !== void 0 ? _health$status : "offline", actuatorStatus);
+	  var overallStatus = (0, _getMostImportantStatus.getMostImportantStatus)((_health$status = health === null || health === void 0 ? void 0 : health.status) !== null && _health$status !== void 0 ? _health$status : "offline", actuatorStatus); // forceShow trumps first condition
+
+	  var shouldRenderCredentialsInput = Boolean(Number((health === null || health === void 0 ? void 0 : health.status) === "protected") & (forceShowCredentialsInput !== null && forceShowCredentialsInput !== void 0 ? forceShowCredentialsInput : 1) || forceShowCredentialsInput);
 	  return /*#__PURE__*/_react.default.createElement("div", {
 	    className: "spring-boot-status ".concat(className, " ").concat(presetClassName, " ").concat(overallStatus),
-	    title: "Status of ".concat(name, ": ").concat(health === null || health === void 0 ? void 0 : health.status, "\nHealth of service: The ").concat(name, " is ").concat(actuatorStatus, ".")
+	    title: "Status of ".concat(name !== null && name !== void 0 ? name : springBootAppUrl, ": ").concat(health === null || health === void 0 ? void 0 : health.status, "\nHealth of service: The ").concat(name !== null && name !== void 0 ? name : springBootAppUrl, " is ").concat(actuatorStatus, ".")
 	  }, /*#__PURE__*/_react.default.createElement("div", {
 	    className: "actuator"
 	  }, /*#__PURE__*/_react.default.createElement("span", {
 	    className: "statusMessagePrefix"
 	  }, "Status of "), /*#__PURE__*/_react.default.createElement("span", {
 	    className: "statusServiceName"
-	  }, name), ":", " ", /*#__PURE__*/_react.default.createElement("span", {
+	  }, name !== null && name !== void 0 ? name : springBootAppUrl), ":", " ", /*#__PURE__*/_react.default.createElement("span", {
 	    className: "".concat(actuatorStatus, " status")
 	  }, actuatorStatus == null ? "Loading actuator status.." : actuatorStatus)), /*#__PURE__*/_react.default.createElement("div", {
 	    className: "health"
@@ -687,11 +698,11 @@ this["@qanary/spring-boot-health-check"] = (function (require$$0) {
 	    className: "statusMessagePrefix"
 	  }, "Health of "), /*#__PURE__*/_react.default.createElement("span", {
 	    className: "statusServiceName"
-	  }, name), ":", " ", /*#__PURE__*/_react.default.createElement("span", {
+	  }, name !== null && name !== void 0 ? name : springBootAppUrl), ":", " ", /*#__PURE__*/_react.default.createElement("span", {
 	    className: health === null || health === void 0 ? void 0 : health.status
 	  }, health == null ? "Loading health.." : health === null || health === void 0 ? void 0 : health.text)), type === "admin" ? /*#__PURE__*/_react.default.createElement("div", {
 	    className: "credentials-prompt"
-	  }, /*#__PURE__*/_react.default.createElement("div", null, "Enter credentials for basic auth if necessary"), "Username:", " ", /*#__PURE__*/_react.default.createElement("input", {
+	  }, shouldRenderCredentialsInput ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, "Enter credentials for basic auth if necessary"), "Username:", " ", /*#__PURE__*/_react.default.createElement("input", {
 	    value: username,
 	    className: "username-input",
 	    onChange: function onChange(changeEvent) {
@@ -705,7 +716,14 @@ this["@qanary/spring-boot-health-check"] = (function (require$$0) {
 	      return setPassword(changeEvent.target.value);
 	    },
 	    placeholder: "Password"
-	  })) : null);
+	  })) : null, /*#__PURE__*/_react.default.createElement("button", {
+	    className: "credentials-toggle",
+	    onClick: function onClick() {
+	      return setForceShowCredentialsInput(function (v) {
+	        return !v;
+	      });
+	    }
+	  }, "Toggle credentials")) : null);
 	}
 
 	var _default = SpringBootHealthCheck;
