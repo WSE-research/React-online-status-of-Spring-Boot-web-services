@@ -1,6 +1,6 @@
 {
   "name": "@qanary/spring-boot-health-check",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description": "A straightforward component to check the status of a Spring Boot service.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
