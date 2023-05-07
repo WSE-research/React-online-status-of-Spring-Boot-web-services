@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import "./index.css";
 import { useApplicationStatus } from "./hooks/useApplicationStatus";
 import { getMostImportantStatus } from "./utils/getMostImportantStatus";
+import { useLocalStorage } from "./hooks/useStorage";
 
 /**
  * @namespace SpringBootHealthCheck
+ * @typedef {"DEPRECATED"} Deprecated
  */
-
 /**
  * @typedef {Object} SpringBootHealthCheckProps
  * @property {string} [name="service"] The human-readable name that can be used to distinguish multiple components
@@ -15,6 +16,7 @@ import { getMostImportantStatus } from "./utils/getMostImportantStatus";
  * @property {number} [checkInterval=5000] The time in milliseconds between requests checking the status of the service.
  * @property {string} [className=""] Additional class names that should be added to the health check component
  * @property {"default"|"simple"|"minimal"|"none"} [stylePreset="default"] The type of styling preset to use
+ * @property {Deprecated} shouldUseDefaultStyling
  * @property {"actuator"|"admin"|"basic"} [type="actuator"] The type of health endpoint
  */
 
@@ -41,11 +43,38 @@ function SpringBootHealthCheck({
   className = "",
   stylePreset = "default",
   type = "actuator",
+  shouldUseDefaultStyling,
 }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  useEffect(() => {
+    const packageStyle = [
+      "font-family: Consolas, Monaco, 'Lucida Console', monospace",
+      "color: #f31414",
+      "font-size: 18px",
+      "line-height: 18px",
+      "display: block",
+    ].join(";");
+    const codeStyle = [
+      "font-family: Consolas, Monaco, 'Lucida Console', monospace",
+      "line-height: 18px",
+      "font-size: 18px",
+    ].join(";");
+    const regularStyle = ["line-height: 18px", "font-size: 18px"].join(";");
+    if (shouldUseDefaultStyling !== undefined) {
+      console.warn(
+        "%c@qanary/spring-boot-health-check:%cshouldUseDefaultStyling%c is deprecated. Use %cstylePreset%c instead. See the documentation for more information.",
+        packageStyle,
+        codeStyle,
+        regularStyle,
+        codeStyle,
+        regularStyle
+      );
+    }
+  }, []);
+
+  const [username, setUsername] = useLocalStorage("password", "");
+  const [password, setPassword] = useLocalStorage("username", "");
   const [forceShowCredentialsInput, setForceShowCredentialsInput] =
-    useState(null);
+    useState("systemFalse");
   const { health, actuatorStatus } = useApplicationStatus(
     type,
     {
@@ -57,10 +86,10 @@ function SpringBootHealthCheck({
   );
 
   useEffect(() => {
-    if (health?.status !== "protected") {
-      setForceShowCredentialsInput(false);
-    } else {
-      setForceShowCredentialsInput(true);
+    if (health?.status === "protected") {
+      setForceShowCredentialsInput("systemTrue");
+    } else if (forceShowCredentialsInput === "systemTrue") {
+      setForceShowCredentialsInput("systemFalse");
     }
   }, [health]);
 
@@ -70,19 +99,28 @@ function SpringBootHealthCheck({
     actuatorStatus
   );
   // forceShow trumps first condition
+  /*
+    * systemTrue => system wants the prompt to be displayed
+    * systemFalse => system doesn't want the prompt to be displayed
+    * userTrue => user wants the prompt to be displayed
+    * userFalse => user doesn't want the prompt to be displayed
+
+    User decisions should trump system decisions, unless the authentication fails
+  */
   const shouldRenderCredentialsInput = Boolean(
-    Number(health?.status === "protected") & (forceShowCredentialsInput ?? 1) ||
-      forceShowCredentialsInput
+    Number(health?.status === "protected") &
+      Number(
+        forceShowCredentialsInput === "systemTrue" ||
+          forceShowCredentialsInput === "userTrue"
+      ) ||
+      forceShowCredentialsInput === "systemTrue" ||
+      forceShowCredentialsInput === "userTrue"
   );
 
   return (
     <div
       className={`spring-boot-status ${className} ${presetClassName} ${overallStatus}`}
-      title={`Status of ${name ?? springBootAppUrl}: ${
-        health?.status
-      }\nHealth of service: The ${
-        name ?? springBootAppUrl
-      } is ${actuatorStatus}.`}
+      title={`Status of ${name} (${springBootAppUrl}): ${health?.status}\nHealth of service: The ${name} (${springBootAppUrl}) is ${actuatorStatus}.`}
     >
       <div className={"actuator"}>
         <span className="statusMessagePrefix">Status of </span>
@@ -109,6 +147,10 @@ function SpringBootHealthCheck({
           {shouldRenderCredentialsInput ? (
             <>
               <div>Enter credentials for basic auth if necessary</div>
+              <div>
+                WARNING: Your credentials will be stored in the local storage.
+                Always clear it on public or shared computers after use.
+              </div>
               Username:{" "}
               <input
                 value={username}
@@ -121,6 +163,7 @@ function SpringBootHealthCheck({
               Password:{" "}
               <input
                 value={password}
+                type="password"
                 className="password-input"
                 onChange={(changeEvent) =>
                   setPassword(changeEvent.target.value)
@@ -131,7 +174,19 @@ function SpringBootHealthCheck({
           ) : null}
           <button
             className="credentials-toggle"
-            onClick={() => setForceShowCredentialsInput((v) => !v)}
+            //? null for user choice, false for automatic change, true for both
+            onClick={() =>
+              setForceShowCredentialsInput((oldValue) => {
+                switch (oldValue) {
+                  case "userTrue":
+                  case "systemTrue":
+                    return "userFalse";
+                  case "userFalse":
+                  case "systemFalse":
+                    return "userTrue";
+                }
+              })
+            }
           >
             Toggle credentials
           </button>
