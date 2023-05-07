@@ -21,9 +21,6 @@ Object.defineProperty(exports, "useApplicationStatus", {
     return _useApplicationStatus.useApplicationStatus;
   }
 });
-
 var _SpringBootHealthCheck = _interopRequireDefault(require("./SpringBootHealthCheck"));
-
 var _useApplicationStatus = require("./hooks/useApplicationStatus");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

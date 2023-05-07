@@ -5,21 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SERVICE_STATUS = void 0;
 exports.useApplicationStatus = useApplicationStatus;
-
 var _react = require("react");
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; } // @ts-check
 /**
  * @namespace useApplicationStatus
  */
@@ -41,12 +33,12 @@ var SERVICE_STATUS = Object.freeze({
   OK: "ok",
   PROTECTED: "protected"
 });
+
 /**
  * @typedef {Object} HealthStatus
  * @property {ServiceStatus} status The state of the service's health endpoint
  * @property {string} text The precise status or explanation of failure
  */
-
 /**
  * @typedef {Object} ApplicationStatus
  * @property {ServiceStatus} actuatorStatus The state of the Spring Boot actuator endpoint
@@ -61,34 +53,27 @@ var SERVICE_STATUS = Object.freeze({
  * @param {{username:string;password:string;}} [credentials] The Basic Auth Credentials
  * @returns {ApplicationStatus}
  */
-
 exports.SERVICE_STATUS = SERVICE_STATUS;
-
 function useApplicationStatus(type, credentials) {
   var springBootAppUrl = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "http://localhost:8080";
   var interval = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 5000;
-
   var _useState = (0, _react.useState)(undefined),
-      _useState2 = _slicedToArray(_useState, 2),
-      actuatorStatus = _useState2[0],
-      setActuatorStatus = _useState2[1];
-
+    _useState2 = _slicedToArray(_useState, 2),
+    actuatorStatus = _useState2[0],
+    setActuatorStatus = _useState2[1];
   var _useState3 = (0, _react.useState)(undefined),
-      _useState4 = _slicedToArray(_useState3, 2),
-      health = _useState4[0],
-      setHealth = _useState4[1];
-
+    _useState4 = _slicedToArray(_useState3, 2),
+    health = _useState4[0],
+    setHealth = _useState4[1];
   var _useState5 = (0, _react.useState)(true),
-      _useState6 = _slicedToArray(_useState5, 2),
-      checkNotifier = _useState6[0],
-      setCheckNotifier = _useState6[1]; // This is here to prevent issues with people accidentally
+    _useState6 = _slicedToArray(_useState5, 2),
+    checkNotifier = _useState6[0],
+    setCheckNotifier = _useState6[1];
+  // This is here to prevent issues with people accidentally
   // using URLs with a trailing slash
-
-
   if (springBootAppUrl.endsWith("/")) {
     springBootAppUrl = springBootAppUrl.slice(0, -1);
   }
-
   (0, _react.useEffect)(function () {
     switch (type) {
       case "actuator":
@@ -103,7 +88,6 @@ function useApplicationStatus(type, credentials) {
             } else {
               setActuatorStatus(SERVICE_STATUS.OK);
             }
-
             return actuatorResponse.json();
           }).then(function (actuatorData) {
             fetch(actuatorData._links.health.href, {
@@ -118,7 +102,6 @@ function useApplicationStatus(type, credentials) {
                 });
                 return;
               }
-
               return healthResponse.json();
             }).then(function (healthData) {
               if (healthData.status !== "UP") {
@@ -128,7 +111,6 @@ function useApplicationStatus(type, credentials) {
                 });
                 return;
               }
-
               setHealth({
                 status: SERVICE_STATUS.OK,
                 text: healthData.status
@@ -178,7 +160,6 @@ function useApplicationStatus(type, credentials) {
           });
           break;
         }
-
       case "admin":
         {
           fetch("".concat(springBootAppUrl, "/admin/status"), {
@@ -208,7 +189,6 @@ function useApplicationStatus(type, credentials) {
                 text: "The service responded with the ok status code ".concat(response.status)
               });
             }
-
             return response.json();
           }).catch(function () {
             //? If the request goes through with the mode set
@@ -234,7 +214,6 @@ function useApplicationStatus(type, credentials) {
           });
           break;
         }
-
       case "basic":
         {
           fetch(springBootAppUrl).then(function (response) {
@@ -272,7 +251,6 @@ function useApplicationStatus(type, credentials) {
           });
           break;
         }
-
       default:
         {
           setActuatorStatus(SERVICE_STATUS.PROBLEM);
@@ -282,7 +260,6 @@ function useApplicationStatus(type, credentials) {
           });
         }
     }
-
     setTimeout(function () {
       return setCheckNotifier(!checkNotifier);
     }, interval);

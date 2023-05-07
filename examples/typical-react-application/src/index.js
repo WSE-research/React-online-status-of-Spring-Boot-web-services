@@ -9,7 +9,7 @@ root.render(
   <React.StrictMode>
     <>
       <SpringBootHealthCheck
-        springBootAppUrl="http://demos.swe.htwk-leipzig.de:40111/"
+        springBootAppUrl="http://demos.swe.htwk-leipzig.de:40111"
         checkInterval={10000}
         stylePreset="simple"
         name="My Spring Boot App"
