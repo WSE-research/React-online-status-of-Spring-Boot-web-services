@@ -75,3 +75,13 @@ Working examples can be found in the examples directory:
 
 - [Using the plug-in on a basic web page](./examples/basic-web-page/README.md)
 - [Using the plug-in in a typical React application](./examples/typical-react-application/README.md)
+
+
+### FAQ
+
+We will collect and answer frequently asked questions here:
+
+* How to deal with CORS issues?
+  > Use a package like [https://www.npmjs.com/package/local-cors-proxy](https://www.npmjs.com/package/local-cors-proxy).
+  > We've tested and reviewed version 1.1.0 and it seems to be a relatively minimal solution to this issue.
+  > Simply set the `springBootAppUrl` property to the proxy URL and use the `title` property to easily see which instance monitors which service.
