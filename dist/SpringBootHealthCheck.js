@@ -29,7 +29,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; } // @ts-che
  * @property {number} [checkInterval=5000] The time in milliseconds between requests checking the status of the service.
  * @property {string} [className=""] Additional class names that should be added to the health check component
  * @property {"default"|"simple"|"minimal"|"none"} [stylePreset="default"] The type of styling preset to use
- * @property {Deprecated} shouldUseDefaultStyling
+ * @property {Deprecated} [shouldUseDefaultStyling="DEPRECATED"]
  * @property {"actuator"|"admin"|"basic"} [type="actuator"] The type of health endpoint
  */
 /**
